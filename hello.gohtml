@@ -1,1 +1,32 @@
-<h1>Hello, {{.Name}}!</h1>
+<h1>Hello,
+    {{if .Name}}
+        {{.Name}}
+    {{- else}}
+        there
+    {{- end}}!
+</h1>
+
+{{range .Widgets}}
+    {{template "widget" .}}
+{{end}}
+
+{{template "footer"}}
+
+
+{{define "footer"}}
+    <footer>
+        <p>Copyright 2021 McD</p>
+        <p>Contact information: <a href="mailto:contact@mcd.io">contact@mcd.io</a></p>
+    </footer>
+{{end}}
+
+{{define "widget"}}
+    <div class="widget">
+        {{template "widget-header" .Name}}
+        <span class="price">${{.Price}}</span>
+    </div>
+{{end}}
+
+{{define "widget-header"}}
+    <h3 class="name">{{.}}</h3>
+{{end}}
