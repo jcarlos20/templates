@@ -12,14 +12,7 @@
 
 {{template "footer"}}
 
-
-{{define "footer"}}
-    <footer>
-        <p>Copyright 2021 McD</p>
-        <p>Contact information: <a href="mailto:contact@mcd.io">contact@mcd.io</a></p>
-    </footer>
-{{end}}
-
+{{/*Defining templates*/}}
 {{define "widget"}}
     <div class="widget">
         {{template "widget-header" .Name}}
@@ -29,4 +22,11 @@
 
 {{define "widget-header"}}
     <h3 class="name">{{.}}</h3>
+{{end}}
+
+{{define "footer"}}
+    <footer>
+        <p>Copyright 2021 McD</p>
+        <p>Contact information: <a href="mailto:contact@mcd.io">contact@mcd.io</a></p>
+    </footer>
 {{end}}
