@@ -2,43 +2,32 @@ package main
 
 import (
 	"html/template"
-	"os"
+	"log"
+	"net/http"
 )
 
-type Test struct {
-	HTML     string
-	SafeHTML template.HTML
-	Title    string
-	Path     string
-	Dog      Dog
-	Map      map[string]string
-}
+var testTemplate *template.Template
 
-type Dog struct {
+type ViewData struct {
 	Name string
-	Age  int
 }
 
-func main(){
-	t, err := template.ParseFiles("context.gohtml")
+func main() {
+	var err error
+	testTemplate, err = template.ParseFiles("hello.gohtml")
 	if err != nil {
 		panic(err)
 	}
 
-	data := Test{
-		HTML:     "<h1>A header!</h1>",
-		SafeHTML: template.HTML("<h1>A Safe header</h1>"),
-		Title:    "Backslash! An in depth look at the \"\\\" character.",
-		Path:     "/dashboard/settings",
-		Dog:      Dog{"Fido", 6},
-		Map: map[string]string{
-			"key":       "value",
-			"other_key": "other_value",
-		},
-	}
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":3000", nil))
+}
 
-	err = t.Execute(os.Stdout, data)
+func handler(writer http.ResponseWriter, request *http.Request)  {
+	writer.Header().Set("Content-Type", "text/html")
+	vd := ViewData{"John Smith"}
+	err := testTemplate.Execute(writer, vd)
 	if err != nil {
-		panic(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
 	}
 }
